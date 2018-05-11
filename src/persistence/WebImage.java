@@ -28,7 +28,7 @@ public class WebImage extends MyThread{
 	}
 
 	private void writeImg(String img, FileOutputStream out) throws IOException {
-		URLConnection image = new URL(img).openConnection(ConstantList.PROXY);
+		URLConnection image = new URL(img).openConnection();
 		image.addRequestProperty("User-Agent",
 				"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
 		InputStream in = image.getInputStream();
@@ -53,7 +53,7 @@ public class WebImage extends MyThread{
 
 	@Override
 	public void execute() {
-		File image = new File(filePath);
+		File image = new File(ConstantList.FILE_IMG_PATH + filePath + ConstantList.EXTENSION_JPG);
 		try {
 			writeImg(imageUrl, new FileOutputStream(image));
 			addFilter(image.getName(), ImageIO.read(image));

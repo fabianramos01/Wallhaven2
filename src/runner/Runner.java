@@ -4,7 +4,7 @@ import controller.Controller;
 
 public class Runner {
 
-	public Runner() {
-		new Controller();
+	public static void main(String[] args) {
+		new Controller();		
 	}
 }

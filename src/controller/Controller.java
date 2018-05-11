@@ -18,25 +18,35 @@ public class Controller implements ActionListener {
 	private FrameHome frameHome;
 	private Timer timer;
 	private long time;
+	private ArrayList<WebImage> webImages;
+	private File copy;
 
 	public Controller() {
+		copy = new File(ConstantList.FILE_IMG_PATH_F);
 		frameHome = new FrameHome(this);
 		timer();
 	}
 
 	private void init() {
+		removeFiles();
 		timer.start();
 		time = System.currentTimeMillis();
 		int count = 0;
 		try {
 			FileManager.downloadFile(frameHome.getSearch());
 			for (String image : FileManager.getImagesURL()) {
-				new WebImage(image, String.valueOf(count));
+				webImages.add(new WebImage(image, String.valueOf(count)));
 				count++;
 			}
 			JOptionPane.showMessageDialog(null, "Tiempo transcurrido: " + (System.currentTimeMillis()-time)/1000 + "seg");
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private void removeFiles() {
+		for (File file : copy.listFiles()) {
+			file.delete();
 		}
 	}
 	
