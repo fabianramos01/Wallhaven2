@@ -24,6 +24,7 @@ public class Controller implements ActionListener {
 	public Controller() {
 		copy = new File(ConstantList.FILE_IMG_PATH_F);
 		frameHome = new FrameHome(this);
+		webImages = new ArrayList<>();
 		timer();
 	}
 
@@ -38,28 +39,34 @@ public class Controller implements ActionListener {
 				webImages.add(new WebImage(image, String.valueOf(count)));
 				count++;
 			}
-			JOptionPane.showMessageDialog(null, "Tiempo transcurrido: " + (System.currentTimeMillis()-time)/1000 + "seg");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void removeFiles() {
 		for (File file : copy.listFiles()) {
 			file.delete();
 		}
 	}
-	
+
 	private void timer() {
 		timer = new Timer(ConstantList.TIME_REFRESH, new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				frameHome.loadImages(getImageList());
+				frameHome.refreshProgress(new File(ConstantList.FILE_IMG_PATH).list().length + copy.list().length, 48);
+				if (new File(ConstantList.FILE_IMG_PATH).list().length + copy.list().length == 48) {
+					timer.stop();
+					JOptionPane.showMessageDialog(null,
+							"Tiempo transcurrido: " + (System.currentTimeMillis() - time) / 1000 + "seg");
+				}
+
 			}
 		});
 	}
-	
+
 	private ArrayList<String> getImageList() {
 		ArrayList<String> list = new ArrayList<>();
 		for (File file : new File(ConstantList.FILE_IMG_PATH_F).listFiles()) {
