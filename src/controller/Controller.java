@@ -19,21 +19,23 @@ public class Controller implements ActionListener {
 	private Timer timer;
 	private long time;
 	private ArrayList<WebImage> webImages;
-	private File copy;
+	private File copyFolder;
+	private File originalFolder;
 
 	public Controller() {
-		copy = new File(ConstantList.FILE_IMG_PATH_F);
 		frameHome = new FrameHome(this);
+		copyFolder = new File(ConstantList.FILE_IMG_PATH_F);
+		originalFolder = new File(ConstantList.FILE_IMG_PATH);
 		webImages = new ArrayList<>();
 		timer();
 	}
 
 	private void init() {
 		removeFiles();
-		timer.start();
 		time = System.currentTimeMillis();
 		int count = 0;
 		try {
+			timer.start();
 			FileManager.downloadFile(frameHome.getSearch());
 			for (String image : FileManager.getImagesURL()) {
 				webImages.add(new WebImage(image, String.valueOf(count)));
@@ -45,7 +47,10 @@ public class Controller implements ActionListener {
 	}
 
 	private void removeFiles() {
-		for (File file : copy.listFiles()) {
+		for (File file : copyFolder.listFiles()) {
+			file.delete();
+		}
+		for (File file : originalFolder.listFiles()) {
 			file.delete();
 		}
 	}
@@ -55,9 +60,9 @@ public class Controller implements ActionListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				frameHome.refreshProgress(originalFolder.list().length + copyFolder.list().length, 48);
 				frameHome.loadImages(getImageList());
-				frameHome.refreshProgress(new File(ConstantList.FILE_IMG_PATH).list().length + copy.list().length, 48);
-				if (new File(ConstantList.FILE_IMG_PATH).list().length + copy.list().length == 48) {
+				if (originalFolder.list().length + copyFolder.list().length == 48) {
 					timer.stop();
 					JOptionPane.showMessageDialog(null,
 							"Tiempo transcurrido: " + (System.currentTimeMillis() - time) / 1000 + "seg");

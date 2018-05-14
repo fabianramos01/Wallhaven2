@@ -68,6 +68,7 @@ public class FrameHome extends JFrame {
 
 	public void refreshProgress(int value, int all) {
 		progressBar.setValue(value * 100 / all);
+		revalidate();
 	}
 
 	public String getSearch() {
