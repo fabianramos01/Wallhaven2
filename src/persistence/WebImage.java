@@ -11,6 +11,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import javax.imageio.ImageIO;
+import javax.swing.JCheckBox;
 
 import controller.ConstantList;
 import model.MyThread;
@@ -19,11 +20,15 @@ public class WebImage extends MyThread{
 	
 	private String imageUrl;
 	private String filePath;
+	private JCheckBox download;
+	private JCheckBox filter;
 
-	public WebImage(String imageUrl, String filePath) {
+	public WebImage(String imageUrl, String filePath, JCheckBox download, JCheckBox filter) {
 		super("", ConstantList.SLEEP);
 		this.imageUrl = imageUrl;
 		this.filePath = filePath;
+		this.download = download;
+		this.filter = filter;
 		start();
 	}
 
@@ -56,7 +61,9 @@ public class WebImage extends MyThread{
 		File image = new File(ConstantList.FILE_IMG_PATH + filePath + ConstantList.EXTENSION_JPG);
 		try {
 			writeImg(imageUrl, new FileOutputStream(image));
+			download.setSelected(true);
 			addFilter(image.getName(), ImageIO.read(image));
+			filter.setSelected(true);
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
 		} catch (IOException e) {

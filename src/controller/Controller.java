@@ -12,6 +12,7 @@ import javax.swing.Timer;
 import persistence.FileManager;
 import persistence.WebImage;
 import view.FrameHome;
+import view.FrameStatus;
 
 public class Controller implements ActionListener {
 
@@ -37,8 +38,11 @@ public class Controller implements ActionListener {
 		try {
 			timer.start();
 			FileManager.downloadFile(frameHome.getSearch());
+			FrameStatus frameStatus = new FrameStatus(this);
+			frameStatus.loadList(FileManager.getImagesURL());
 			for (String image : FileManager.getImagesURL()) {
-				webImages.add(new WebImage(image, String.valueOf(count)));
+				webImages.add(new WebImage(image, String.valueOf(count), frameStatus.getCheckBoxDownload().get(count),
+						frameStatus.getCheckBoxFilter().get(count)));
 				count++;
 			}
 		} catch (IOException e) {
@@ -47,6 +51,12 @@ public class Controller implements ActionListener {
 	}
 
 	private void removeFiles() {
+		if (!copyFolder.exists()) {
+			copyFolder.mkdir();
+		}
+		if (!originalFolder.exists()) {
+			originalFolder.mkdir();
+		}
 		for (File file : copyFolder.listFiles()) {
 			file.delete();
 		}
@@ -61,8 +71,8 @@ public class Controller implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				frameHome.refreshProgress(originalFolder.list().length + copyFolder.list().length, 48);
-				frameHome.loadImages(getImageList());
 				if (originalFolder.list().length + copyFolder.list().length == 48) {
+					frameHome.loadImages(getImageList());
 					timer.stop();
 					JOptionPane.showMessageDialog(null,
 							"Tiempo transcurrido: " + (System.currentTimeMillis() - time) / 1000 + "seg");

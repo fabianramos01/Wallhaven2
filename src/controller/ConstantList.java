@@ -28,4 +28,9 @@ public class ConstantList {
 	
 	public static final Proxy PROXY = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("172.16.0.73", 8080));
 	public static final int SLEEP = 10;
+	
+	public static final String URL = "URL";
+	public static final String DOWNLOAD = "Descarga";
+	public static final String FILTER = "Filtro";
+	
 }
