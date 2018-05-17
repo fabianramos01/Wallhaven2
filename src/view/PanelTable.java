@@ -31,13 +31,20 @@ public class PanelTable extends JPanel {
 		int i = 0;
 		for (String string : list) {
 			add(addLabel(string));
-			checkBoxDownload.add(new JCheckBox());
+			checkBoxDownload.add(createCheckBox());
 			add(checkBoxDownload.get(i));
-			checkBoxFilter.add(new JCheckBox());
+			checkBoxFilter.add(createCheckBox());
 			add(checkBoxFilter.get(i));
 			i++;
 		}
 		revalidate();
+	}
+	
+	private JCheckBox createCheckBox() {
+		JCheckBox checkBox = new JCheckBox();
+		checkBox.setHorizontalAlignment(JCheckBox.CENTER);
+		checkBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		return checkBox;
 	}
 	
 	private JLabel addLabel(String name) {
