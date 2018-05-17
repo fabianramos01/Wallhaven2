@@ -38,7 +38,7 @@ public class Controller implements ActionListener {
 		try {
 			timer.start();
 			FileManager.downloadFile(frameHome.getSearch());
-			FrameStatus frameStatus = new FrameStatus(this);
+			FrameStatus frameStatus = new FrameStatus();
 			frameStatus.loadList(FileManager.getImagesURL());
 			for (String image : FileManager.getImagesURL()) {
 				webImages.add(new WebImage(image, String.valueOf(count), frameStatus.getCheckBoxDownload().get(count),
